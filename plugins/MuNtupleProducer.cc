@@ -34,6 +34,7 @@
 // #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleDTSegmentFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMDigiFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMRecHitFiller.h"
+#include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleCSCCorrelatedLCTFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMOHStatusFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMAMCStatusFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMSimHitFiller.h"
@@ -69,6 +70,7 @@ MuNtupleProducer::MuNtupleProducer(const edm::ParameterSet &config)
     m_fillers.push_back(std::make_unique<MuNtupleGEMAMCStatusFiller>(consumesCollector(), m_config, m_tree, "gemAMCStatus"));
 
   m_fillers.push_back(std::make_unique<MuNtupleGEMRecHitFiller>(consumesCollector(), m_config, m_tree, "gemRecHit"));
+  m_fillers.push_back(std::make_unique<MuNtupleCSCCorrelatedLCTFiller>(consumesCollector(), m_config, m_tree, "cscDigiLCT"));
 
   // m_fillers.push_back(std::make_unique<MuNtupleGEMSegmentFiller>(consumesCollector(), m_config, m_tree, "gemSegment"));
 

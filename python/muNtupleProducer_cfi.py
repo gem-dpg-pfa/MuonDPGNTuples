@@ -5,11 +5,11 @@ muNtupleProducer = cms.EDAnalyzer("MuNtupleProducer",
                                   MuonServiceProxy,
                                   ph1DtDigiTag = cms.untracked.InputTag("muonDTDigis"),
                                   ph2DtDigiTag = cms.untracked.InputTag("none"),
-
                                   ph1DtSegmentTag = cms.untracked.InputTag("dt4DSegments"),        
                                   ph2DtSegmentTag = cms.untracked.InputTag("none"),
-
                                   ph1DTtTrigMode = cms.untracked.string('DTTTrigSyncFromDB'),
+                                  cscLCTDigi = cms.untracked.InputTag("muonCSCDigis","MuonCSCCorrelatedLCTDigi"),
+                                  
                                   isMC = cms.bool(False),
                                   gemDigiTag = cms.untracked.InputTag("hltMuonGEMDigis"),
                                   gemOHStatusTag = cms.untracked.InputTag("muonGEMDigis", "OHStatus"),

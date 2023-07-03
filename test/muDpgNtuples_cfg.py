@@ -79,6 +79,11 @@ options.register('GE21',
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.bool,
                  "enables storing of GE21 rechits, disabled by default in CMSSW: i.e when running on a RAW dataset it's possible to reprocess digi and build GE21 rechits and save them in the ntuples")
+options.register('CSClct',
+                 True, #default value
+                 VarParsing.VarParsing.multiplicity.singleton,
+                 VarParsing.VarParsing.varType.bool,
+                 "enables unpacking of CSC digi to extract CSC diti LCT")
 
 options.register('inputFolder',
                  #/eos/cms/store/
@@ -199,6 +204,12 @@ elif options.reUnpack:
     process.p = cms.Path(
         process.muonGEMDigis *
         process.muNtupleProducer)
+elif options.CSClct:
+    # TO STORE OUTPUT FILE
+    # process.gino = cms.OutputModule("PoolOutputModule", outputCommands = cms.untracked.vstring("keep *_*_*_*"), fileName=cms.untracked.string("out.root"))
+    process.p = cms.Path(process.muonCSCDigis * process.muNtupleProducer)
+    # TO STORE OUTPUT FILE
+    # process.this_is_the_end = cms.EndPath(process.gino)
 elif options.STA:
     #process.muNtupleProducer.muonTag = cms.untracked.InputTag("TestSTA")
 
