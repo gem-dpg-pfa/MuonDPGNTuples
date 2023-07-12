@@ -35,6 +35,7 @@
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMDigiFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMRecHitFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleCSCCorrelatedLCTFiller.h"
+#include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMPadDigiClusterFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMOHStatusFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMAMCStatusFiller.h"
 #include "MuDPGAnalysis/MuonDPGNtuples/src/MuNtupleGEMSimHitFiller.h"
@@ -53,6 +54,8 @@ MuNtupleProducer::MuNtupleProducer(const edm::ParameterSet &config)
   bool storeOHStatus = static_cast<bool>(config.getParameter<bool>("storeOHStatus"));
   bool storeAMCStatus = static_cast<bool>(config.getParameter<bool>("storeAMCStatus"));
   bool RunOnSTA = static_cast<bool>(config.getParameter<bool>("STA"));
+  bool RunOnLCT = static_cast<bool>(config.getParameter<bool>("CSClct"));
+
   float displacement = static_cast<double>(config.getParameter<double>("displacement"));
 
   m_tree = std::shared_ptr<TTree>(fileService->make<TTree>("MuDPGTree", "Mu DPG Tree"));
@@ -70,7 +73,10 @@ MuNtupleProducer::MuNtupleProducer(const edm::ParameterSet &config)
     m_fillers.push_back(std::make_unique<MuNtupleGEMAMCStatusFiller>(consumesCollector(), m_config, m_tree, "gemAMCStatus"));
 
   m_fillers.push_back(std::make_unique<MuNtupleGEMRecHitFiller>(consumesCollector(), m_config, m_tree, "gemRecHit"));
-  m_fillers.push_back(std::make_unique<MuNtupleCSCCorrelatedLCTFiller>(consumesCollector(), m_config, m_tree, "cscDigiLCT"));
+  if (RunOnLCT){
+      m_fillers.push_back(std::make_unique<MuNtupleCSCCorrelatedLCTFiller>(consumesCollector(), m_config, m_tree, "cscDigiLCT"));
+      m_fillers.push_back(std::make_unique<MuNtupleGEMPadDigiClusterFiller>(consumesCollector(), m_config, m_tree, "gemPadDigiCluster"));
+  }
 
   // m_fillers.push_back(std::make_unique<MuNtupleGEMSegmentFiller>(consumesCollector(), m_config, m_tree, "gemSegment"));
 

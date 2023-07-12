@@ -192,6 +192,7 @@ process.muNtupleProducer.isMC = cms.bool(options.isMC)
 process.muNtupleProducer.storeOHStatus = cms.bool(options.storeOHStatus)
 process.muNtupleProducer.storeAMCStatus = cms.bool(options.storeAMCStatus)
 process.muNtupleProducer.STA = cms.bool(options.STA)
+process.muNtupleProducer.CSClct = cms.bool(options.CSClct)
 process.muNtupleProducer.displacement = cms.double(options.displacement)
 
 if options.reUnpack and options.GE21:
@@ -206,10 +207,10 @@ elif options.reUnpack:
         process.muNtupleProducer)
 elif options.CSClct:
     # TO STORE OUTPUT FILE
-    # process.gino = cms.OutputModule("PoolOutputModule", outputCommands = cms.untracked.vstring("keep *_*_*_*"), fileName=cms.untracked.string("out.root"))
+    process.gino = cms.OutputModule("PoolOutputModule", outputCommands = cms.untracked.vstring("keep *_*_*_*"), fileName=cms.untracked.string("out.root"))
     process.p = cms.Path(process.muonCSCDigis * process.muNtupleProducer)
     # TO STORE OUTPUT FILE
-    # process.this_is_the_end = cms.EndPath(process.gino)
+    process.this_is_the_end = cms.EndPath(process.gino)
 elif options.STA:
     #process.muNtupleProducer.muonTag = cms.untracked.InputTag("TestSTA")
 

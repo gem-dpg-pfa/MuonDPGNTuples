@@ -54,6 +54,8 @@ MuNtupleConfig::MuNtupleConfig(const edm::ParameterSet & config,
   m_inputTags["gemDigiTag"] = config.getUntrackedParameter<edm::InputTag>("gemDigiTag", none);
   
   m_inputTags["cscLCTDigi"] = config.getUntrackedParameter<edm::InputTag>("cscLCTDigi", none);
+
+  m_inputTags["GEMPadDigiCluster"] = config.getUntrackedParameter<edm::InputTag>("GEMPadDigiCluster", none);
   
   m_inputTags["gemOHStatusTag"] = config.getUntrackedParameter<edm::InputTag>("gemOHStatusTag", none);
   

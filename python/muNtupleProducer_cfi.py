@@ -9,6 +9,7 @@ muNtupleProducer = cms.EDAnalyzer("MuNtupleProducer",
                                   ph2DtSegmentTag = cms.untracked.InputTag("none"),
                                   ph1DTtTrigMode = cms.untracked.string('DTTTrigSyncFromDB'),
                                   cscLCTDigi = cms.untracked.InputTag("muonCSCDigis","MuonCSCCorrelatedLCTDigi"),
+                                  GEMPadDigiCluster = cms.untracked.InputTag("muonCSCDigis","MuonGEMPadDigiCluster"),
                                   
                                   isMC = cms.bool(False),
                                   gemDigiTag = cms.untracked.InputTag("hltMuonGEMDigis"),
