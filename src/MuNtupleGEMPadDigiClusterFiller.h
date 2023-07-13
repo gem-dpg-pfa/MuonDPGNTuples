@@ -41,22 +41,21 @@ class MuNtupleGEMPadDigiClusterFiller : public MuNtupleBaseFiller
   edm::ESGetToken<GEMGeometry, MuonGeometryRecord> geomToken_;
   edm::EDGetTokenT<GEMPadDigiClusterCollection> m_GEMPadDigiClusterCollection_token_;
   
-  unsigned int m_nGEMDigis;
+  unsigned int nClusterCollections;
 
   // DET ID
-  std::vector<int> m_station;
-  std::vector<int> m_endcap;
-  std::vector<int> m_chamber;
-  std::vector<int> m_layer;
-  std::vector<int> m_ring;  
+    std::vector<unsigned int> m_collectionID;
+  std::vector<short int> m_station;
+  std::vector<short int> m_endcap;
+  std::vector<short int> m_chamber;
+  std::vector<short int> m_layer;
+  std::vector<short int> m_etaP;  
   // GEM Pad DIGI
   std::vector<int16_t>  m_GEM1_bx;
-  std::vector<int16_t>  m_GEM2_bx;
-  std::vector<uint16_t> m_GEM1_pad;
-  std::vector<uint16_t> m_GEM2_pad;
-  std::vector<int> m_GEM1_nPartitions;  
-  std::vector<int> m_GEM2_nPartitions;
-  
+  std::vector<short int> m_bx;
+  std::vector<short int> m_clusterSize;
+  std::vector<short int> m_ClusterALCTMatchTime;
+  std::vector<short int> m_ClusterFirstPad;
 };
 
 #endif

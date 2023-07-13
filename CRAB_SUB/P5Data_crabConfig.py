@@ -34,13 +34,13 @@ elif args.Dataset == 'Prompt':
     unitsPerJob = 20
     fileSplitting = "FileBased"
 elif args.Dataset == 'ZeroBias':
-    globalTag = '124X_dataRun3_Prompt_v4'
+    globalTag = '130X_dataRun3_Prompt_v3'
     inputDataset = ["/ZeroBias/Run2022C-PromptReco-v1/AOD"]#['/ZeroBias'+str(i)+'/Run2022B-PromptReco-v1/AOD' for i in range(20)]
     unitsPerJob = 1
     fileSplitting = "FileBased"
 elif args.Dataset == 'ZMu':
     globalTag = '124X_dataRun3_Prompt_v4'
-    inputDataset = ["/Muon/Run2022G-ZMu-PromptReco-v1/RAW-RECO"]
+    inputDataset = ["/Muon0/Run2023D-ZMu-PromptReco-v1/RAW-RECO","/Muon1/Run2023D-ZMu-PromptReco-v1/RAW-RECO"]
     unitsPerJob = 20
     fileSplitting = "FileBased"
 elif args.Dataset == 'MinimumBias':
@@ -62,7 +62,7 @@ config.JobType.pluginName = 'Analysis'
 #config.JobType.psetName = "{}/test/muDpgNtuples_cfg_misalignement.py".format(baseDirectory)
 config.JobType.psetName = "{}/test/muDpgNtuples_cfg.py".format(baseDirectory)
 config.JobType.allowUndistributedCMSSW = True
-config.JobType.pyCfgParams = ['isMC=False','reUnpack=True', 'storeOHStatus=True','GE21=True','nEvents=-1','globalTag='+str(globalTag)]
+config.JobType.pyCfgParams = ['isMC=False','CSClct=True', 'storeOHStatus=True','GE21=False','nEvents=-1','globalTag='+str(globalTag)]
 #config.JobType.maxMemoryMB = 5000
 
 config.section_("Data")
@@ -70,7 +70,7 @@ config.Data.inputDBS = 'global'
 config.Data.splitting = fileSplitting
 config.Data.unitsPerJob = unitsPerJob
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/group/dpg_gem/comm_gem/P5_Commissioning/2022/GEMCommonNtuples'
+config.Data.outLFNDirBase = '/store/group/dpg_gem/comm_gem/P5_Commissioning/2023/GEMCommonNtuples'
 config.Data.allowNonValidInputDataset = True
 
 config.section_("Site")
