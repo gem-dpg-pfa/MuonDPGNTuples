@@ -38,6 +38,7 @@ void MuNtupleCSCCorrelatedLCTFiller::initialize()
   m_tree->Branch((m_label + "_CLCTquality").c_str(), &m_CLCT_getQuality);
   m_tree->Branch((m_label + "_ALCTquality").c_str(), &m_ALCT_Quality);
   m_tree->Branch((m_label + "_bend").c_str(), &m_bend);
+  m_tree->Branch((m_label + "_slope").c_str(), &m_slope);
   m_tree->Branch((m_label + "_GEM1_bx").c_str(), &m_GEM1_bx);
   m_tree->Branch((m_label + "_GEM2_bx").c_str(), &m_GEM2_bx);
   m_tree->Branch((m_label + "_GEM1_pad").c_str(), &m_GEM1_pad);
@@ -69,6 +70,7 @@ void MuNtupleCSCCorrelatedLCTFiller::clear()
   m_CLCT_getQuality.clear();
   m_ALCT_Quality.clear();
   m_bend.clear();
+  m_slope.clear();
   m_GEM1_bx.clear();
   m_GEM2_bx.clear();
   m_GEM1_pad.clear();
@@ -140,6 +142,7 @@ void MuNtupleCSCCorrelatedLCTFiller::fill(const edm::Event & ev)
             m_CLCT_getQuality.push_back(lctItr1->getCLCT().getQuality());
             m_ALCT_Quality.push_back(lctItr1->getALCT().getQuality());
             m_bend.push_back(lctItr1->getBend());
+            m_slope.push_back(lctItr1->getSlope());
             // GEM 
             m_GEM1_bx.push_back(lctItr1->getGEM1().bx());
             m_GEM2_bx.push_back(lctItr1->getGEM2().bx());

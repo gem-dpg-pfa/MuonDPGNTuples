@@ -39,7 +39,7 @@ elif args.Dataset == 'ZeroBias':
     unitsPerJob = 1
     fileSplitting = "FileBased"
 elif args.Dataset == 'ZMu':
-    globalTag = '124X_dataRun3_Prompt_v4'
+    globalTag = '130X_dataRun3_Prompt_v3'
     inputDataset = ["/Muon0/Run2023D-ZMu-PromptReco-v1/RAW-RECO","/Muon1/Run2023D-ZMu-PromptReco-v1/RAW-RECO"]
     unitsPerJob = 20
     fileSplitting = "FileBased"

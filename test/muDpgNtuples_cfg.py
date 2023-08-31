@@ -69,7 +69,7 @@ options.register('storeOHStatus',
                  "Save OH status info from unpacker")
 
 options.register('storeAMCStatus',
-                 True, #default value
+                 False, #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.bool,
                  "Save AMC status info from unpacker")
