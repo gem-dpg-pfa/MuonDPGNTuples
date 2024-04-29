@@ -428,7 +428,7 @@ void MuNtupleGEMStandAloneMuonFiller::fill(const edm::Event & ev)
                   m_propagated_layer.push_back(gem_id.layer());
                   m_propagated_chamber.push_back(gem_id.chamber());
                   m_propagated_etaP.push_back(gem_id.roll());
-                  m_propagated_strip.push_back(eta_partition->strip(dest_local_pos));
+                  m_propagated_strip.push_back(eta_partition->strip(local_point));
 
                   m_propagatedGlb_x.push_back(dest_global_pos.x());
                   m_propagatedGlb_y.push_back(dest_global_pos.y());
