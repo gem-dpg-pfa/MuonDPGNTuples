@@ -59,6 +59,7 @@ class MuNtupleCSCCorrelatedLCTFiller : public MuNtupleBaseFiller
   std::vector<uint16_t> m_ALCT_Quality;
   std::vector<uint16_t> m_bend;
   std::vector<uint16_t> m_slope;
+  std::vector<float> m_fractionalStrip;
   
   // GEM Pad DIGI
   std::vector<int16_t>  m_GEM1_bx;

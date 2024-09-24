@@ -39,6 +39,7 @@ void MuNtupleCSCCorrelatedLCTFiller::initialize()
   m_tree->Branch((m_label + "_ALCTquality").c_str(), &m_ALCT_Quality);
   m_tree->Branch((m_label + "_bend").c_str(), &m_bend);
   m_tree->Branch((m_label + "_slope").c_str(), &m_slope);
+  m_tree->Branch((m_label + "_fractionalStrip").c_str(), &m_fractionalStrip);
   m_tree->Branch((m_label + "_GEM1_bx").c_str(), &m_GEM1_bx);
   m_tree->Branch((m_label + "_GEM2_bx").c_str(), &m_GEM2_bx);
   m_tree->Branch((m_label + "_GEM1_pad").c_str(), &m_GEM1_pad);
@@ -71,6 +72,7 @@ void MuNtupleCSCCorrelatedLCTFiller::clear()
   m_ALCT_Quality.clear();
   m_bend.clear();
   m_slope.clear();
+  m_fractionalStrip.clear();
   m_GEM1_bx.clear();
   m_GEM2_bx.clear();
   m_GEM1_pad.clear();
@@ -86,7 +88,7 @@ void MuNtupleCSCCorrelatedLCTFiller::fill(const edm::Event & ev)
 
   edm::Handle<CSCCorrelatedLCTDigiCollection> CSCcorrLCT_collection;
   ev.getByToken(m_CSCcorrLCT_token_,CSCcorrLCT_collection);
-    
+
     if (CSCcorrLCT_collection.isValid())
       {
 	
@@ -101,18 +103,29 @@ void MuNtupleCSCCorrelatedLCTFiller::fill(const edm::Event & ev)
         int layer = cscid.layer();
         int ring = cscid.ring();
         unsigned short chType = cscid.iChamberType();
-        std::string chName = cscid.chamberName(); 
-        
-        
+        std::string chName = cscid.chamberName();
+
+        //std::cout << "Station " << station << ", ";
+        //std::cout << "endcap " << endcap << ", ";
+        //std::cout << "chamber " << chamber << ", ";
+        //std::cout << "layer " << layer << ", ";
+        //std::cout << "ring " << ring << ", ";
+        //std::cout << "chtype " << chType << ", ";
+        //std::cout << "chname " << chName;
+        //std::cout << std::endl;
         
         int triggerID = cscid.triggerCscId();
         int triggerSector = cscid.triggerSector();
         CSCCorrelatedLCTDigiCollection::Range range1 = (*cscItr1).second;
         for (CSCCorrelatedLCTDigiCollection::const_iterator lctItr1 = range1.first; lctItr1 != range1.second; lctItr1++) {
             
+            //std::cout << "\tLCT: ";
+            //std::cout << "CSC ID " << lctItr1->getCSCID() << ", ";
+            //std::cout << "LCT quality " << lctItr1->getQuality() << ", ";
+            //std::cout << " frac strip " << lctItr1->getFractionalStrip();
+            //std::cout << std::endl;
+
             // IF VERBOSE
-            // std::cout << "Chamber " << chName<< std::endl;
-            // std::cout << "CSC QUALITY " << lctItr1->getQuality()<< std::endl;
             int quality = lctItr1->getQuality();
             // std::cout<<"lctItr1->getGEM1().bx() "<<lctItr1->getGEM1().bx()<<std::endl;
             // std::cout<<"lctItr1->getGEM1().pad() "<<lctItr1->getGEM1().pad()<<std::endl;
@@ -143,6 +156,7 @@ void MuNtupleCSCCorrelatedLCTFiller::fill(const edm::Event & ev)
             m_ALCT_Quality.push_back(lctItr1->getALCT().getQuality());
             m_bend.push_back(lctItr1->getBend());
             m_slope.push_back(lctItr1->getSlope());
+            m_fractionalStrip.push_back(lctItr1->getFractionalStrip());
             // GEM 
             m_GEM1_bx.push_back(lctItr1->getGEM1().bx());
             m_GEM2_bx.push_back(lctItr1->getGEM2().bx());
