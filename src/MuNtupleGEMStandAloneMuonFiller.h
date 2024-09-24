@@ -52,15 +52,41 @@ class MuNtupleGEMStandAloneMuonFiller : public MuNtupleBaseFiller
  private:
 
   edm::EDGetTokenT<std::vector<reco::Track>>  m_muToken;
-  
+
+  /**
+   * CSC rechit and segment extracted from standalone muon, if it passes by ME1/1
+   * needed to store key layer position of muon in ME1/1
+   */
+  DetId m_recHitID;
+  uint16_t m_recHitDetID;
+  uint16_t m_recHitSubDetID;
+  CSCSegment *m_me11Segment;
+  RecSegment *m_recSegment; 
+  CSCDetId m_segmentCSCDetID;
+  CSCDetId m_segmentCSCDetIDLayer4;
+
+  /**
+   * Fractional strips on ME1/1a and ME1/1b
+   */
+  float m_segmentFractionalStripME11a;
+  float m_segmentFractionalStripME11b;
 
   TVectorF m_nullVecF;
 
+  std::vector<int> m_id;        // STAmuon id
   std::vector<float> m_pt;        // STAmuon pT [GeV/c]
   std::vector<float> m_normChi2;  // STAmuon normalizedChi2
   std::vector<float> m_phi;       // STAmuon phi [rad]
   std::vector<float> m_eta;       // STAmuon eta
   std::vector<short> m_charge;    // STAmuon charge
+
+  /**
+   * CSC segment fractional strip
+   */
+  std::vector<int> m_segmentMuID;
+  std::vector<int> m_segmentEndcap;
+  std::vector<int> m_segmentChamber;
+  std::vector<float> m_segmentFractionalStrip;
 
   std::vector<bool>  m_isGEM;
   std::vector<bool>  m_isCSC;
@@ -95,6 +121,7 @@ class MuNtupleGEMStandAloneMuonFiller : public MuNtupleBaseFiller
   std::vector<int> m_propagated_etaP;
   std::vector<float> m_propagated_strip;
 
+  std::vector<int> m_propagated_id;
   std::vector<float> m_propagated_pt;
   std::vector<float> m_propagated_phi;
   std::vector<float> m_propagated_eta;

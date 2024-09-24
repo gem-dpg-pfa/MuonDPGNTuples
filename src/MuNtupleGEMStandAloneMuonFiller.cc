@@ -63,11 +63,17 @@ void MuNtupleGEMStandAloneMuonFiller::initialize()
 
   // STA Track info
   m_tree->Branch((m_label + "_nMuons").c_str(), &m_nMuons);
+  m_tree->Branch((m_label + "_id").c_str(), &m_id);
   m_tree->Branch((m_label + "_pt").c_str(), &m_pt);
   m_tree->Branch((m_label + "_phi").c_str(), &m_phi);
   m_tree->Branch((m_label + "_eta").c_str(), &m_eta);
   m_tree->Branch((m_label + "_charge").c_str(), &m_charge);
   m_tree->Branch((m_label + "_normChi2").c_str(), &m_normChi2);
+  // CSC segment info
+  m_tree->Branch((m_label + "_segment_muid").c_str(), &m_segmentMuID);
+  m_tree->Branch((m_label + "_segment_endcap").c_str(), &m_segmentEndcap);
+  m_tree->Branch((m_label + "_segment_chamber").c_str(), &m_segmentChamber);
+  m_tree->Branch((m_label + "_segment_fractionalStrip").c_str(), &m_segmentFractionalStrip);
   // STA Track Hits info
   m_tree->Branch((m_label + "_isGEM").c_str(), &m_isGEM);
   m_tree->Branch((m_label + "_isCSC").c_str(), &m_isCSC);
@@ -83,6 +89,7 @@ void MuNtupleGEMStandAloneMuonFiller::initialize()
   m_tree->Branch((m_label + "_nME4hits").c_str(), &m_nME4hits);
 
   //Propagated tracks info
+  m_tree->Branch((m_label + "_propagated_id").c_str(), &m_propagated_id);
   m_tree->Branch((m_label + "_propagated_pt").c_str(), &m_propagated_pt);
   m_tree->Branch((m_label + "_propagated_phi").c_str(), &m_propagated_phi);
   m_tree->Branch((m_label + "_propagated_eta").c_str(), &m_propagated_eta);
@@ -153,11 +160,16 @@ void MuNtupleGEMStandAloneMuonFiller::clear()
 
   // Track info
   m_nMuons = 0;
+  m_id.clear();
   m_pt.clear();
   m_normChi2.clear();
   m_phi.clear();
   m_eta.clear();
   m_charge.clear();
+  m_segmentMuID.clear();
+  m_segmentEndcap.clear();
+  m_segmentChamber.clear();
+  m_segmentFractionalStrip.clear();
   m_isGEM.clear();
   m_isCSC.clear();
   m_isDT.clear();
@@ -172,6 +184,7 @@ void MuNtupleGEMStandAloneMuonFiller::clear()
   m_nME4hits.clear();
 
   //Propagated tracks info
+  m_propagated_id.clear();
   m_propagated_pt.clear();
   m_propagated_phi.clear();
   m_propagated_eta.clear();
@@ -255,11 +268,11 @@ void MuNtupleGEMStandAloneMuonFiller::fill(const edm::Event & ev)
     return;
   }
 
-  // edm::ESHandle<CSCGeometry> csc = m_config->m_cscGeometry;
-  // if (not csc.isValid()) {
-  //   std::cout << "CSCGeometry is invalid" << std::endl;
-  //   return;
-  // }
+  edm::ESHandle<CSCGeometry> csc = m_config->m_cscGeometry;
+  if (not csc.isValid()) {
+    std::cout << "CSCGeometry is invalid" << std::endl;
+    return;
+  }
 
   edm::ESHandle<TransientTrackBuilder> transient_track_builder = m_config->m_transientTrackBuilder;
   if (not transient_track_builder.isValid()) {
@@ -290,9 +303,9 @@ void MuNtupleGEMStandAloneMuonFiller::fill(const edm::Event & ev)
       const reco::HitPattern &p = track.hitPattern();
       // Loop on the hits of this track
       for (int i = 0; i < p.numberOfAllHits(reco::HitPattern::TRACK_HITS); i++) {
-        uint32_t hit = p.getHitPattern(reco::HitPattern::TRACK_HITS, i);
-        if (p.validHitFilter(hit) ){
-          nTrackHits++;
+          uint32_t hit = p.getHitPattern(reco::HitPattern::TRACK_HITS, i);
+          if (p.validHitFilter(hit) ){
+              nTrackHits++;
           
           // Hit in the muon system
           if (p.getHitType(hit)==0){
@@ -304,8 +317,8 @@ void MuNtupleGEMStandAloneMuonFiller::fill(const edm::Event & ev)
               int CSC_station = p.getMuonStation(hit);                
               int CSC_ring = reco::HitPattern::getCSCRing(hit);
               if(CSC_station == 1 && ((CSC_ring == 1) || (CSC_ring == 4)) ) {
-                isME11 = true;
-                nME11_hits++;
+                  isME11 = true;
+                  nME11_hits++;
               }
               if(CSC_station == 2 && CSC_ring == 1) isME21 = true;
               if(CSC_station == 1) nME1_hits++;
@@ -323,9 +336,9 @@ void MuNtupleGEMStandAloneMuonFiller::fill(const edm::Event & ev)
       } // end Loop on the hits of this track
       if (verbose) std::cout<<"\tMuon number "<<m_nMuons<<", in the region = "<< track_region <<", contains "<<nTrackHits<<" hits"<<std::endl;
       if (verbose) std::cout<<"\tisDT "<<isDT<<" isCSC "<< isCSC <<" isME21 "<< isME21 <<" isME11 "<<isME11<<" isRPC "<< isRPC << " isGEM" << isGEM <<std::endl;
-      
-      
+     
       // Fill track info
+      m_id.push_back(m_nMuons);
       m_pt.push_back(track.pt());
       m_normChi2.push_back(track.normalizedChi2());
       m_phi.push_back(track.phi());
@@ -343,6 +356,64 @@ void MuNtupleGEMStandAloneMuonFiller::fill(const edm::Event & ev)
       m_nME2hits.push_back(nME2_hits);
       m_nME3hits.push_back(nME3_hits);
       m_nME4hits.push_back(nME4_hits);
+
+
+      /**
+       * Fill branches for ME1/1 segment strip
+       * Copied from https://github.com/aebid/GEMCSCTriggerTest/blob/master/CSCSlopeFinder/plugins/CSCSegmentFinder.cc
+       */
+      for (size_t iRechit = 0; iRechit != track.recHitsSize(); iRechit++) {
+          const TrackingRecHit *recHit = track.recHit(iRechit).get();
+          //std::cout << "    rechit " << recHit << std::endl;
+          //std::cout << "Is valid? " << recHit->isValid() << std::endl;
+          /**
+           * Find the rechit station and determine if it is ME1/1
+           */
+          m_recHitID = recHit->geographicalId();
+          m_recHitDetID = m_recHitID.det();
+          if (m_recHitDetID == DetId::Muon) {
+              m_recHitSubDetID = m_recHitID.subdetId();
+              if (m_recHitSubDetID == (uint16_t) MuonSubdetId::CSC) {
+                  /**
+                   * Process only hits in ME1/1; A is ring 4, B is ring 1
+                   * see https://indico.cern.ch/event/522500/contributions/2146029/attachments/1281818/1910359/160531_csc_offline_software.pdf
+                   * and https://twiki.cern.ch/twiki/pub/CMS/CSCDPGRelatedCMSNotes/IN2007_024.pdf
+                   */
+                  if (CSCDetId(m_recHitID).station() == 1 and (CSCDetId(m_recHitID).ring() == 1 or CSCDetId(m_recHitID).ring() == 4) and recHit->dimension() == 4) {
+                      /**
+                       * If it is ME1/1, extract segments in the muon
+                       */
+                      m_recSegment = (RecSegment *) recHit;
+                      //std::cout << "    recsegment " << m_recSegment << std::endl;
+                      m_me11Segment = (CSCSegment *) m_recSegment;
+                      //std::cout << "    segment " << m_me11Segment << std::endl;
+                      /**
+                       * Get ME1/1 chamber geometry
+                       */
+                      m_segmentCSCDetID  = m_me11Segment->cscDetId();
+                      //std::cout << "    det id " << m_segmentCSCDetID << std::endl;
+                      m_segmentCSCDetIDLayer4 = CSCDetId(m_segmentCSCDetID.endcap(), m_segmentCSCDetID.station(), m_segmentCSCDetID.ring(), m_segmentCSCDetID.chamber(), 4);
+                      //std::cout << "    det ID layer 4 " << m_segmentCSCDetIDLayer4 << std::endl;
+                      const CSCLayer *m_me11Layer = csc->layer(m_segmentCSCDetIDLayer4);
+                      //std::cout << "    ME1/1 4th layer " << m_me11Layer << std::endl;
+                      const CSCLayerGeometry *m_me11LayerGeometry = m_me11Layer->geometry();
+                      m_segmentMuID.push_back(m_nMuons);
+                      m_segmentEndcap.push_back(m_segmentCSCDetID.endcap());
+                      m_segmentChamber.push_back(m_segmentCSCDetID.chamber());
+                      if (CSCDetId(m_recHitID).ring() == 1) {
+                          // This is ME1/1b
+                          m_segmentFractionalStrip.push_back(m_me11LayerGeometry->strip(m_me11Segment->localPosition()));
+                      } else {
+                          // This is ME1/1a
+                          m_segmentFractionalStrip.push_back(m_me11LayerGeometry->strip(m_me11Segment->localPosition()) + 64);
+                      }
+                      //m_segmentFractionalStripME11b = m_me11LayerGeometry->strip(m_me11Segment->localPosition());
+                      //m_segmentFractionalStripME11a = m_segmentFractionalStripME11a + 64;
+                      //std::cout << "    Found an ME1/1 segment with fractional strip " << m_segmentFractionalStrip.back() << std::endl;
+                  }
+              }
+          }
+      }
 
       // Propagation
       const reco::TransientTrack&& transient_track = transient_track_builder->build(track);
@@ -405,6 +476,7 @@ void MuNtupleGEMStandAloneMuonFiller::fill(const edm::Event & ev)
                   const double dest_global_r_err = std::sqrt(dest_global_err.rerr(dest_global_pos));
                   const double dest_global_phi_err = std::sqrt(dest_global_err.phierr(dest_global_pos));
                   // Track info
+                  m_propagated_id.push_back(m_nMuons);
                   m_propagated_pt.push_back(track.pt());
                   m_propagated_phi.push_back(track.phi());
                   m_propagated_eta.push_back(track.eta());
