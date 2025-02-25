@@ -74,6 +74,8 @@ void MuNtupleGEMStandAloneMuonFiller::initialize()
   m_tree->Branch((m_label + "_segment_endcap").c_str(), &m_segmentEndcap);
   m_tree->Branch((m_label + "_segment_chamber").c_str(), &m_segmentChamber);
   m_tree->Branch((m_label + "_segment_fractionalStrip").c_str(), &m_segmentFractionalStrip);
+  m_tree->Branch((m_label + "_segment_GlobalPhi").c_str(), &m_segmentGlobalPhi);
+  m_tree->Branch((m_label + "_segment_GlobalEta").c_str(), &m_segmentGlobalEta);
   // STA Track Hits info
   m_tree->Branch((m_label + "_isGEM").c_str(), &m_isGEM);
   m_tree->Branch((m_label + "_isCSC").c_str(), &m_isCSC);
@@ -170,6 +172,8 @@ void MuNtupleGEMStandAloneMuonFiller::clear()
   m_segmentEndcap.clear();
   m_segmentChamber.clear();
   m_segmentFractionalStrip.clear();
+  m_segmentGlobalPhi.clear();
+  m_segmentGlobalEta.clear();
   m_isGEM.clear();
   m_isCSC.clear();
   m_isDT.clear();
@@ -407,6 +411,15 @@ void MuNtupleGEMStandAloneMuonFiller::fill(const edm::Event & ev)
                           // This is ME1/1a
                           m_segmentFractionalStrip.push_back(m_me11LayerGeometry->strip(m_me11Segment->localPosition()) + 64);
                       }
+
+                      /**
+                       * Calculate and save global segment position
+                       */
+                      const GeomDet *geomDet = m_config->m_trackingGeometry->idToDet(m_recHitID);
+                      auto segmentGlobalPosition = geomDet->toGlobal(m_me11Segment->localPosition());
+                      m_segmentGlobalPhi.push_back(segmentGlobalPosition.phi());
+                      m_segmentGlobalEta.push_back(segmentGlobalPosition.eta());
+
                       //m_segmentFractionalStripME11b = m_me11LayerGeometry->strip(m_me11Segment->localPosition());
                       //m_segmentFractionalStripME11a = m_segmentFractionalStripME11a + 64;
                       //std::cout << "    Found an ME1/1 segment with fractional strip " << m_segmentFractionalStrip.back() << std::endl;
