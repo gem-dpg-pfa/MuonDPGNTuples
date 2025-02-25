@@ -56,6 +56,19 @@ class MuNtupleGEMPadDigiClusterFiller : public MuNtupleBaseFiller
   std::vector<short int> m_clusterSize;
   std::vector<short int> m_ClusterALCTMatchTime;
   std::vector<short int> m_ClusterFirstPad;
+  std::vector<float> m_ClusterCenter;
+
+  std::vector<float> m_ClusterLocalX;
+  std::vector<float> m_ClusterLocalY;
+  std::vector<float> m_ClusterLocalZ;
+  std::vector<float> m_ClusterLocalR;
+  std::vector<float> m_ClusterLocalPhi;
+
+  std::vector<float> m_ClusterGlobalX;
+  std::vector<float> m_ClusterGlobalY;
+  std::vector<float> m_ClusterGlobalZ;
+  std::vector<float> m_ClusterGlobalR;
+  std::vector<float> m_ClusterGlobalPhi;
 };
 
 #endif
