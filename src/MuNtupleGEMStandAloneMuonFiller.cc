@@ -76,6 +76,8 @@ void MuNtupleGEMStandAloneMuonFiller::initialize()
   m_tree->Branch((m_label + "_segment_fractionalStrip").c_str(), &m_segmentFractionalStrip);
   m_tree->Branch((m_label + "_segment_GlobalPhi").c_str(), &m_segmentGlobalPhi);
   m_tree->Branch((m_label + "_segment_GlobalEta").c_str(), &m_segmentGlobalEta);
+  m_tree->Branch((m_label + "_segment_DirectionPhi").c_str(), &m_segmentDirectionPhi);
+  m_tree->Branch((m_label + "_segment_DirectionEta").c_str(), &m_segmentDirectionEta);
   // STA Track Hits info
   m_tree->Branch((m_label + "_isGEM").c_str(), &m_isGEM);
   m_tree->Branch((m_label + "_isCSC").c_str(), &m_isCSC);
@@ -174,6 +176,8 @@ void MuNtupleGEMStandAloneMuonFiller::clear()
   m_segmentFractionalStrip.clear();
   m_segmentGlobalPhi.clear();
   m_segmentGlobalEta.clear();
+  m_segmentDirectionPhi.clear();
+  m_segmentDirectionEta.clear();
   m_isGEM.clear();
   m_isCSC.clear();
   m_isDT.clear();
@@ -419,6 +423,9 @@ void MuNtupleGEMStandAloneMuonFiller::fill(const edm::Event & ev)
                       auto segmentGlobalPosition = geomDet->toGlobal(m_me11Segment->localPosition());
                       m_segmentGlobalPhi.push_back(segmentGlobalPosition.phi());
                       m_segmentGlobalEta.push_back(segmentGlobalPosition.eta());
+                      auto segmentGlobalDirection = geomDet->toGlobal(m_me11Segment->localDirection());
+                      m_segmentDirectionPhi.push_back(segmentGlobalDirection.phi());
+                      m_segmentDirectionEta.push_back(segmentGlobalDirection.eta());
 
                       //m_segmentFractionalStripME11b = m_me11LayerGeometry->strip(m_me11Segment->localPosition());
                       //m_segmentFractionalStripME11a = m_segmentFractionalStripME11a + 64;

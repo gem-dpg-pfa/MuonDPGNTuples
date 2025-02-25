@@ -89,6 +89,8 @@ class MuNtupleGEMStandAloneMuonFiller : public MuNtupleBaseFiller
   std::vector<float> m_segmentFractionalStrip;
   std::vector<float> m_segmentGlobalPhi;
   std::vector<float> m_segmentGlobalEta;
+  std::vector<float> m_segmentDirectionPhi;
+  std::vector<float> m_segmentDirectionEta;
 
   std::vector<bool>  m_isGEM;
   std::vector<bool>  m_isCSC;
