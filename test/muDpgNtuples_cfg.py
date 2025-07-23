@@ -142,7 +142,8 @@ if "eos/cms" in options.inputFolder:
     #process.source.fileNames = ["file:"+options.inputFolder + f for f in files if "07a64f0e-25eb-40b6-b2a6-e8971a4e0ce8.root" in f]
     #process.source.fileNames = ["root://cms-xrd-global.cern.ch//store/data/Run2023C/Muon0/RAW-RECO/ZMu-PromptReco-v4/000/368/567/00000/23a959f6-169b-4ec6-aaec-23c1f9683cb2.root"]
     #process.source.fileNames = ["file:/eos/cms/store/group/dpg_gem/comm_gem/P5_Commissioning/2023/RPCMonitor/RAW/v2/000/367/758/00000/01e92558-6268-4891-a6bc-22859c27bde2.root"]
-    process.source.fileNames = ["file:/eos/cms/tier0/store/data/Run2024H/RPCMonitor/RAW/v1/000/385/841/00000/548e0370-ba60-4cb4-a02d-b8f423e58cb2.root"]
+    #process.source.fileNames = ["file:/eos/cms/tier0/store/data/Run2024H/RPCMonitor/RAW/v1/000/385/841/00000/548e0370-ba60-4cb4-a02d-b8f423e58cb2.root"]
+    process.source.fileNames = ["file:/eos/cms/tier0/store/data/Run2025D/Muon0/RAW/v1/000/394/862/00000/f79e5704-0600-43c3-97cc-b4fcb2abd81f.root"]
     #process.source.fileNames = ["file:/eos/cms/tier0/store/data/Run2024H/Muon0/RAW/v1/000/385/841/00000/00a80358-0924-45b8-b965-24e39acdf2af.root"]
     #process.source.fileNames = ["file:/eos/home-i/iawatson/cscfeds/outputRPCMON.root"]
 
@@ -263,7 +264,8 @@ elif options.STA:
     process.rpcRecHits.rpcDigiLabel = cms.InputTag('rpcDigiMerger')
 
     ## GEM Unpacker
-    process.muonGEMDigis.InputLabel = cms.InputTag("hltFEDSelectorGEM")
+    #process.muonGEMDigis.InputLabel = cms.InputTag("hltFEDSelectorGEM")
+    process.muonGEMDigis.InputLabel = cms.InputTag("rawDataCollector")
     process.muonGEMDigis.fedIdEnd = cms.uint32(1478)
     process.muonGEMDigis.fedIdStart = cms.uint32(1467)
     process.muonGEMDigis.ge21Off = cms.bool(False)
