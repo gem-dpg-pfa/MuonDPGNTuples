@@ -1,3 +1,5 @@
+#!/bin/bash
+
 odir=$1
 
 rm -rf $odir
